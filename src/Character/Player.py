@@ -15,3 +15,16 @@ class Player:
         self.exp = exp
         self.gold = gold
         self.item = item
+
+    def __del__(self):
+        print("죽었습니다.")
+
+    def attack(self, atk, luk):
+        pass
+
+    def defense(self, defense, luk):
+        pass
+
+    def skill(self, atk, defense, mana, luk):
+        pass
+
