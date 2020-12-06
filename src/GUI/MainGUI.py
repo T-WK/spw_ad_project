@@ -1,9 +1,9 @@
-# main GUI 
+# main GUI
 
 from PyQt5.QtCore import Qt
 
 # text
-from PyQt5.QtWidgets import QLineEdit, QTextEdit
+from PyQt5.QtWidgets import QLineEdit, QTextEdit, QLabel
 
 # layout
 from PyQt5.QtWidgets import QLayout, QGridLayout, QHBoxLayout, QVBoxLayout
@@ -19,9 +19,8 @@ from PyQt5.QtWidgets import QToolButton
 
 # else
 from keypads import attacBtnList, menuBtnList
-
-
-
+from PyQt5.QtGui import *
+import urllib.request
 
 
 class Button(QToolButton):
@@ -31,7 +30,7 @@ class Button(QToolButton):
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         self.setText(text)
         self.clicked.connect(callback)
-    
+
     def sizeHint(self):
         size = super(Button, self).sizeHint()
         size.setHeight(size.height() + 40)
@@ -49,13 +48,37 @@ class TextRPG(QWidget):
         self.playerUI()
         self.monsterUI()
         self.mergeUI()
-    
-# 왼쪽 상단 GUI
+
+        hbox = QHBoxLayout()
+
+        vbox = QVBoxLayout()
+        vbox.addLayout(self.mergedDisplayUI)
+
+        grid = QGridLayout()
+        vbox.addLayout(grid)
+
+        hbox.addLayout(vbox)
+        hbox.addWidget(QTextEdit())
+
+        self.setLayout(hbox)
+
+        grid.addWidget(Button("공격", self.buttonEvent), 0, 0)
+        grid.addWidget(Button("방어", self.buttonEvent), 0, 1)
+        grid.addWidget(Button("스킬", self.buttonEvent), 0, 2)
+
+        grid.addWidget(Button("상점", self.buttonEvent), 1, 0)
+        grid.addWidget(Button("도망가기", self.buttonEvent), 1, 1)
+        grid.addWidget(Button("던전나가기", self.buttonEvent), 1, 2)
+
+
+    # 왼쪽 상단 GUI
 
     def playerUI(self):
         # player text ui
-        self.playerTextUI = QTextEdit()
-        self.playerTextUI.setAcceptRichText(False)
+        self.playerImg = QLabel()
+        self.playerImg.setPixmap(QPixmap("../Art/모험가.jpeg"))
+
+
 
         # player 마나 바 & 체력 & 경험치 바
         self.playerPhysicalBar = QProgressBar(self)
@@ -63,52 +86,53 @@ class TextRPG(QWidget):
         self.playerExperiencevalue = QProgressBar(self)
 
         # set position of process bar
-        self.playerPhysicalBar.setGeometry(20,20,300,25)
-        self.playerManaBar.setGeometry(20,20,300,25)
-        self.playerExperiencevalue.setGeometry(20,20,300,25)
+        self.playerPhysicalBar.setGeometry(20, 20, 300, 25)
+        self.playerManaBar.setGeometry(20, 20, 300, 25)
+        self.playerExperiencevalue.setGeometry(20, 20, 300, 25)
 
-        # changing the color of process bar 
+        # changing the color of process bar
         self.playerPhysicalBar.setStyleSheet("QProgressBar::chunk "
-                          "{"
-                          "background-color: #FF3000;"
-                          "}") 
+                                             "{"
+                                             "background-color: #FF3000;"
+                                             "}")
 
         self.playerManaBar.setStyleSheet("QProgressBar::chunk "
-                          "{"
-                          "background-color: #0063FF;"
-                          "}") 
-        
-        self.playerExperiencevalue.setStyleSheet("QProgressBar::chunk "
-                          "{"
-                          "background-color: #42FF67;"
-                          "}") 
+                                         "{"
+                                         "background-color: #0063FF;"
+                                         "}")
 
-    
+        self.playerExperiencevalue.setStyleSheet("QProgressBar::chunk "
+                                                 "{"
+                                                 "background-color: #42FF67;"
+                                                 "}")
+
     def monsterUI(self):
         # monster text ui
-        self.monsterTextUI = QTextEdit()
-        self.monsterTextUI.setAcceptRichText(False)
+        self.monsterImg = QLabel()
+        pmap = QPixmap("../Art/슬라임.png")
+        pmap = pmap.scaled(300, 300)
+        self.monsterImg.setPixmap(pmap)
+        self.monsterImg.setGeometry(20, 20, 200, 200)
 
         # monter 마나 바 & 체력 바
         self.monsterPhysicalBar = QProgressBar(self)
         self.monsterManaBar = QProgressBar(self)
 
         # set position of process bar
-        self.monsterPhysicalBar.setGeometry(20,20,300,25)
-        self.monsterManaBar.setGeometry(20,20,300,25)
+        self.monsterPhysicalBar.setGeometry(20, 20, 300, 25)
+        self.monsterManaBar.setGeometry(20, 20, 300, 25)
 
-        # changing the color of process bar 
+        # changing the color of process bar
         self.monsterPhysicalBar.setStyleSheet("QProgressBar::chunk "
-                          "{"
-                          "background-color: #42FF67;"
-                          "}") 
+                                              "{"
+                                              "background-color: #42FF67;"
+                                              "}")
 
         self.monsterManaBar.setStyleSheet("QProgressBar::chunk "
-                          "{"
-                          "background-color: #0063FF;"
-                          "}") 
-    
-    
+                                          "{"
+                                          "background-color: #0063FF;"
+                                          "}")
+
     def mergeUI(self):
         # 레이아웃 생성
         self.mergedPlayerUI = QHBoxLayout()
@@ -127,48 +151,29 @@ class TextRPG(QWidget):
         # merge monster 마나 & 체력 & 경험치 바
         self.mergeMonsterStatusUI.addWidget(self.monsterPhysicalBar)
         self.mergeMonsterStatusUI.addWidget(self.monsterManaBar)
-        
+
         # merge player layout
-        self.mergedPlayerUI.addWidget(self.playerTextUI)
+        self.mergedPlayerUI.addWidget(self.playerImg)
         self.mergedPlayerUI.addLayout(self.mergePlayerStatusUI)
 
         # merge monster layout
         self.mergedMonsterUI.addLayout(self.mergeMonsterStatusUI)
-        self.mergedMonsterUI.addWidget(self.monsterTextUI)
+        self.mergedMonsterUI.addWidget(self.monsterImg)
 
         # merge display ui
         self.mergedDisplayUI.addLayout(self.mergedMonsterUI)
         self.mergedDisplayUI.addLayout(self.mergedPlayerUI)
 
 
-# 왼쪽 하단 GUI
+
+    # 왼쪽 하단 GUI
+
+
+
     def buttonEvent(self):
-        
-        #레이아웃 생성
-        self.buttons
-        
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        sender = self.sender()
+        if sender.text() == "공격":
+            print("공격")
 
 if __name__ == '__main__':
     import sys
