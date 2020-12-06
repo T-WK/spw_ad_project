@@ -1,20 +1,26 @@
 # 캐릭터 공통 클래스
+import Archer
+
+
 
 class Player:
-    name = ""
-    job = ""
+    hp = 0
+    atk = 0
+    defense = 0
+    mana = 0
+    luk = 0
     exp = 0
     gold = 0
     item = ""
     lvl = 1
 
-    def __init__(self, name, job, lvl, exp, gold, item):
+    name = ""
+    job = ""
+
+    def __init__(self, name, job):
         self.name = name
         self.job = job
-        self.lvl = lvl
-        self.exp = exp
-        self.gold = gold
-        self.item = item
+
 
     def __del__(self):
         print("죽었습니다.")
@@ -27,4 +33,8 @@ class Player:
 
     def skill(self, atk, defense, mana, luk):
         pass
+
+p = Player("지존용사", "도적")
+
+
 
