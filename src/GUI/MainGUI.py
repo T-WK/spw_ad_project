@@ -3,7 +3,7 @@
 from PyQt5.QtCore import Qt
 
 # text
-from PyQt5.QtWidgets import QLineEdit, QTextEdit
+from PyQt5.QtWidgets import QLineEdit, QTextEdit, QLabel
 
 # layout
 from PyQt5.QtWidgets import QLayout, QGridLayout, QHBoxLayout, QVBoxLayout
@@ -19,6 +19,8 @@ from PyQt5.QtWidgets import QToolButton
 
 # else
 from keypads import attacBtnList, menuBtnList
+from PyQt5.QtGui import *
+import urllib.request
 
 
 class Button(QToolButton):
@@ -69,15 +71,14 @@ class TextRPG(QWidget):
         grid.addWidget(Button("던전나가기", self.buttonEvent), 1, 2)
 
 
-
-
-
     # 왼쪽 상단 GUI
 
     def playerUI(self):
         # player text ui
-        self.playerTextUI = QTextEdit()
-        self.playerTextUI.setAcceptRichText(False)
+        self.playerImg = QLabel()
+        self.playerImg.setPixmap(QPixmap("../Art/모험가.jpeg"))
+
+
 
         # player 마나 바 & 체력 & 경험치 바
         self.playerPhysicalBar = QProgressBar(self)
@@ -107,8 +108,11 @@ class TextRPG(QWidget):
 
     def monsterUI(self):
         # monster text ui
-        self.monsterTextUI = QTextEdit()
-        self.monsterTextUI.setAcceptRichText(False)
+        self.monsterImg = QLabel()
+        pmap = QPixmap("../Art/슬라임.png")
+        pmap = pmap.scaled(300, 300)
+        self.monsterImg.setPixmap(pmap)
+        self.monsterImg.setGeometry(20, 20, 200, 200)
 
         # monter 마나 바 & 체력 바
         self.monsterPhysicalBar = QProgressBar(self)
@@ -149,12 +153,12 @@ class TextRPG(QWidget):
         self.mergeMonsterStatusUI.addWidget(self.monsterManaBar)
 
         # merge player layout
-        self.mergedPlayerUI.addWidget(self.playerTextUI)
+        self.mergedPlayerUI.addWidget(self.playerImg)
         self.mergedPlayerUI.addLayout(self.mergePlayerStatusUI)
 
         # merge monster layout
         self.mergedMonsterUI.addLayout(self.mergeMonsterStatusUI)
-        self.mergedMonsterUI.addWidget(self.monsterTextUI)
+        self.mergedMonsterUI.addWidget(self.monsterImg)
 
         # merge display ui
         self.mergedDisplayUI.addLayout(self.mergedMonsterUI)

@@ -22,9 +22,6 @@ class Player:
         self.job = job
 
 
-    def updateStatus(self, ):
-
-
     def __del__(self):
         print("죽었습니다.")
 
