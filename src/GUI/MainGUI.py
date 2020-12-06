@@ -46,11 +46,20 @@ class TextRPG(QWidget):
         self.initUI()
 
     def initUI(self):
+        
+    # min layouts
+        leftTopLayout = 
+        leftBottomLayout
+        rightLayout
+
+
         self.playerUI()
         self.monsterUI()
         self.mergeUI()
         
-        
+    
+# 왼쪽 상단 GUI
+
     def playerUI(self):
         # player text ui
         self.playerTextUI = QTextEdit()
@@ -109,7 +118,7 @@ class TextRPG(QWidget):
     
     
     def mergeUI(self):
-        # 레이아웃 만듦
+        # 레이아웃 생성
         self.mergedPlayerUI = QHBoxLayout()
         self.mergePlayerStatusUI = QVBoxLayout()
 
@@ -140,7 +149,11 @@ class TextRPG(QWidget):
         self.mergedDisplayUI.addWidget(self.mergedPlayerUI)
 
 
-
+# 왼쪽 하단 GUI
+    def buttonEvent(self):
+        
+        #레이아웃 생성
+        self.buttons
 
 
 
