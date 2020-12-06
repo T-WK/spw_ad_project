@@ -26,7 +26,7 @@ from keypads import attacBtnList, menuBtnList
 
 class Button(QToolButton):
 
-    def def __init__(self, text, callback):
+    def __init__(self, text, callback):
         super().__init__()
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
         self.setText(text)
@@ -46,17 +46,9 @@ class TextRPG(QWidget):
         self.initUI()
 
     def initUI(self):
-        
-    # min layouts
-        leftTopLayout = 
-        leftBottomLayout
-        rightLayout
-
-
         self.playerUI()
         self.monsterUI()
         self.mergeUI()
-        
     
 # 왼쪽 상단 GUI
 
@@ -71,22 +63,22 @@ class TextRPG(QWidget):
         self.playerExperiencevalue = QProgressBar(self)
 
         # set position of process bar
-        self.playerPhysicalBar.setGeovetry(20,20,300,25)
-        self.playerManaBar.setGeovetry(20,20,300,25)
-        self.playerExperiencevalue.setGeovetry(20,20,300,25)
+        self.playerPhysicalBar.setGeometry(20,20,300,25)
+        self.playerManaBar.setGeometry(20,20,300,25)
+        self.playerExperiencevalue.setGeometry(20,20,300,25)
 
         # changing the color of process bar 
-        self.monsterPhysicalBar.setStyleSheet("QProgressBar::chunk "
+        self.playerPhysicalBar.setStyleSheet("QProgressBar::chunk "
                           "{"
                           "background-color: #FF3000;"
                           "}") 
 
-        self.monsterManaBar.setStyleSheet("QProgressBar::chunk "
+        self.playerManaBar.setStyleSheet("QProgressBar::chunk "
                           "{"
                           "background-color: #0063FF;"
                           "}") 
         
-        self.monsterManaBar.setStyleSheet("QProgressBar::chunk "
+        self.playerExperiencevalue.setStyleSheet("QProgressBar::chunk "
                           "{"
                           "background-color: #42FF67;"
                           "}") 
@@ -102,8 +94,8 @@ class TextRPG(QWidget):
         self.monsterManaBar = QProgressBar(self)
 
         # set position of process bar
-        self.monsterPhysicalBar.setGeovetry(20,20,300,25)
-        self.monsterManaBar.setGeovetry(20,20,300,25)
+        self.monsterPhysicalBar.setGeometry(20,20,300,25)
+        self.monsterManaBar.setGeometry(20,20,300,25)
 
         # changing the color of process bar 
         self.monsterPhysicalBar.setStyleSheet("QProgressBar::chunk "
@@ -138,15 +130,15 @@ class TextRPG(QWidget):
         
         # merge player layout
         self.mergedPlayerUI.addWidget(self.playerTextUI)
-        self.mergedPlayerUI.addWidget(self.mergePlayerStatusUI)
+        self.mergedPlayerUI.addLayout(self.mergePlayerStatusUI)
 
         # merge monster layout
-        self.mergedMonsterUI.addWidget(self.mergeMonsterStatusUI)
+        self.mergedMonsterUI.addLayout(self.mergeMonsterStatusUI)
         self.mergedMonsterUI.addWidget(self.monsterTextUI)
 
         # merge display ui
-        self.mergedDisplayUI.addWidget(self.mergedMonsterUI)
-        self.mergedDisplayUI.addWidget(self.mergedPlayerUI)
+        self.mergedDisplayUI.addLayout(self.mergedMonsterUI)
+        self.mergedDisplayUI.addLayout(self.mergedPlayerUI)
 
 
 # 왼쪽 하단 GUI
@@ -154,7 +146,7 @@ class TextRPG(QWidget):
         
         #레이아웃 생성
         self.buttons
-
+        
 
 
 
@@ -182,6 +174,6 @@ if __name__ == '__main__':
     import sys
 
     app = QApplication(sys.argv)
-    calc = Calculator()
-    calc.show()
+    rpg = TextRPG()
+    rpg.show()
     sys.exit(app.exec_())

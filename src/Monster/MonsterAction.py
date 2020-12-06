@@ -23,3 +23,7 @@ class Monster:
         print("처치되었습니다.")
         print(dropGold, "골드와", dropExp, "경험치를 얻었습니다.")
 
+    def setHp(val):
+        self.hp = val
+
+    
