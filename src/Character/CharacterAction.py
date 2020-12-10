@@ -11,7 +11,6 @@ class Character:
         self.maxExp = maxExp
         self.gold = gold
         self.mana
-
         self.mulEmp = 2
 
     def isDead(self):
