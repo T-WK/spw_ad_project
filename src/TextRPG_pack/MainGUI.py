@@ -21,7 +21,7 @@ from PyQt5.QtWidgets import QToolButton
 from keypads import attacBtnList, menuBtnList
 import urllib.request
 
-from System.sysClass import * as 
+import System.system as system
 from PyQt5.QtGui import *
 
 

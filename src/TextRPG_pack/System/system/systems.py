@@ -1,4 +1,4 @@
-from Variables import variable as va
+import Vareables.variable as va
 
 def Turn():
     turn, va.turn = va.turn, not va.turn
