@@ -19,8 +19,11 @@ from PyQt5.QtWidgets import QToolButton
 
 # else
 from keypads import attacBtnList, menuBtnList
-from PyQt5.QtGui import *
 import urllib.request
+
+import System.system as system
+from PyQt5.QtGui import *
+
 
 
 class Button(QToolButton):
@@ -64,11 +67,16 @@ class TextRPG(QWidget):
 
         grid.addWidget(Button("공격", self.buttonEvent), 0, 0)
         grid.addWidget(Button("방어", self.buttonEvent), 0, 1)
-        grid.addWidget(Button("스킬", self.buttonEvent), 0, 2)
+        grid.addWidget(Button("스킬1", self.buttonEvent), 0, 2)
+        grid.addWidget(Button("스킬2", self.buttonEvent), 0, 3)
 
         grid.addWidget(Button("상점", self.buttonEvent), 1, 0)
         grid.addWidget(Button("도망가기", self.buttonEvent), 1, 1)
         grid.addWidget(Button("던전나가기", self.buttonEvent), 1, 2)
+
+        grid.addWidget(Button("던전1", self.buttonEvent), 2, 0)
+        grid.addWidget(Button("던전2", self.buttonEvent), 2, 1)
+        grid.addWidget(Button("던전3", self.buttonEvent), 2, 2)
 
 
     # 왼쪽 상단 GUI
@@ -166,14 +174,56 @@ class TextRPG(QWidget):
 
 
 
-    # 왼쪽 하단 GUI
-
-
+    # 왼쪽 하단 GUI 버튼 이벤트 들
 
     def buttonEvent(self):
         sender = self.sender()
-        if sender.text() == "공격":
-            print("공격")
+        
+        if Dungeon():
+            if Turn():
+                if sender.text() == "공격":
+                    print("공격")
+
+                if sender.text() == "방어":
+                    print("방어")
+                
+                if sender.text() == "스킬1":
+                    print("스킬1")
+                
+                if sender.text() == "스킬2":
+                    print("스킬2")
+
+                if sender.text() == "도망가기":
+                    print("도망가기")
+                    
+                    changeDungeonVal()
+
+                if sender.text() == "던전나가기":
+                    print("던전나가기")
+                    
+                    changeDungeonVal()
+            
+            else:
+                print("몬스터가 공격했습니다.");
+
+        else:
+            if sender.text() == "상점":
+                print("상점")
+            
+            if sender.text() == "던전1":
+                print("던전1")
+                
+                changeDungeonVal()
+            
+            if sender.text() == "던전2":
+                print("던전2")
+                
+                changeDungeonVal()
+            
+            if sender.text() == "던전3":
+                print("던전3")
+                
+                changeDungeonVal()
 
 if __name__ == '__main__':
     import sys
