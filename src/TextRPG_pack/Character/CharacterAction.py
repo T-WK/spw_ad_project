@@ -14,7 +14,7 @@ class Character:
         self.level = level
 
         self.maxExp = maxExp
-        self.curExp = maxExp
+        self.curExp = 0
 
         self.gold = gold
 
@@ -25,11 +25,11 @@ class Character:
 
     def isDead(self):
         if self.curHp <= 0:
-            self.__del__(self.exp, self.gold)
+            self.__del__()
 
-    def __del__(self, dropExp, dropGold):
+    def __del__(self):
         print("죽었습니다.")
-        print(dropGold, "골드와", dropExp, "경험치를 잃었습니다.")
+        print(self.gold, "골드와", self.curExp, "경험치를 잃었습니다.")
 
     def setHp(self, val):
         self.curHp = val

@@ -4,3 +4,6 @@ inDungeon = False # Fasle 던전에 업음(마을에 있음) True 던전에 있�
 isStart = False
 
 progressText = ""
+
+isMonsterDead = False
+isPlayerDead = False

@@ -50,7 +50,6 @@ class TextRPG(QWidget):
 
     sys = Systems()
     chrInfo = ch.Character("용사", 2000, 100, 10, 10, 1, 100, 0)
-    monsterInfo = ms.Monster("슬라임", 1000, 100, 1, 10, 10)
 
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -143,14 +142,7 @@ class TextRPG(QWidget):
         self.playerManaBar = QProgressBar(self)
         self.playerExpBar = QProgressBar(self)
 
-        hpVal = int((self.chrInfo.curHp / self.chrInfo.maxHp) * 100)
-        self.playerPhysicalBar.setValue(hpVal)
-
-        manaVal = int((self.chrInfo.curMana / self.chrInfo.maxMana) * 100)
-        self.playerManaBar.setValue(manaVal)
-
-        expVal = int((self.chrInfo.maxExp / self.chrInfo.curExp) * 100)
-        self.playerExpBar.setValue(expVal)
+        self.showPlayerInfo()
 
         # set position of process bar
         self.playerPhysicalBar.setGeometry(20, 20, 300, 25)
@@ -203,9 +195,17 @@ class TextRPG(QWidget):
                                               "background-color: #FF3000;"
                                               "}")
 
-    def chgMonsterImg(self):
+    def chgMonsterImg(self, name):
         if self.sys.isDungeon():
-            self.monsterImg = "../Art/슬라임.png"
+            if va.isMonsterDead:
+                self.monsterImg = "../Art/폭발.jpeg"
+            else:
+                if name == "슬라임":
+                    self.monsterImg = "../Art/슬라임.png"
+                elif name == "고블린":
+                    self.monsterImg = "../Art/고블린.png"
+                elif name == "늑대":
+                    self.monsterImg = "../Art/늑대.png"
         else:
             self.monsterImg = "../Art/white.jpg"
 
@@ -214,6 +214,16 @@ class TextRPG(QWidget):
     def showMonsterInfo(self):
         hpVal = int((self.monsterInfo.curHp / self.monsterInfo.maxHp) * 100)
         self.monsterPhysicalBar.setValue(hpVal)
+
+    def showPlayerInfo(self):
+        hpVal = int((self.chrInfo.curHp / self.chrInfo.maxHp) * 100)
+        self.playerPhysicalBar.setValue(hpVal)
+
+        manaVal = int((self.chrInfo.curMana / self.chrInfo.maxMana) * 100)
+        self.playerManaBar.setValue(manaVal)
+
+        expVal = int((self.chrInfo.curExp / self.chrInfo.maxExp) * 100)
+        self.playerExpBar.setValue(expVal)
 
     def mergeUI(self):
         # 레이아웃 생성
@@ -254,45 +264,67 @@ class TextRPG(QWidget):
 
         if self.sys.isStart():
             if self.sys.isDungeon():
-                if sender.text() == "공격":
-                    self.chrInfo.attack(self.monsterInfo)
+                if not va.isMonsterDead:
+                    if sender.text() == "공격":
+                        self.chrInfo.attack(self.monsterInfo)
+                    elif sender.text() == "방어":
+                        print("방어")
+                    elif sender.text() == "스킬1":
+                        print("스킬1")
+                    elif sender.text() == "스킬2":
+                        print("스킬2")
+                    elif sender.text() == "도망가기":
+                        print("도망가기")
+                    elif sender.text() == "던전나가기":
+                        self.messageEdit.setText("던전에서 나왔습니다.")
+                        self.sys.changeDungeonVal()
+                        self.chgMonsterImg(None)
+                        va.progressText = ""
+                        self.progressEdit.clear()
+                        self.monsterPhysicalBar.setValue(0)
+                        return
+                else:
+                    if sender.text() == "던전나가기":
+                        self.messageEdit.setText("던전에서 나왔습니다.")
+                        self.sys.changeDungeonVal()
+                        self.chgMonsterImg(None)
+                        va.progressText = ""
+                        self.progressEdit.clear()
+                        self.monsterPhysicalBar.setValue(0)
+                        return
+                    return
 
-                if sender.text() == "방어":
-                    print("방어")
-                
-                if sender.text() == "스킬1":
-                    print("스킬1")
-                
-                if sender.text() == "스킬2":
-                    print("스킬2")
+                if self.monsterInfo.curHp <= 0:
+                    self.monsterInfo.curHp = 0
+                    va.isMonsterDead = True
+                    self.monsterInfo.Dead(self.chrInfo)
+                    self.chgMonsterImg(None)
 
-                if sender.text() == "도망가기":
-                    print("도망가기")
-                    self.sys.changeDungeonVal()
-                if sender.text() == "던전나가기":
-                    self.messageEdit.setText("던전에서 나왔습니다.")
-                    
-                    self.sys.changeDungeonVal()
-                    self.chgMonsterImg()
-                    self.monsterPhysicalBar.setValue(0)
-                self.monsterInfo.attack()
-                self.progressEdit.setText(va.progressText)
-                self.monsterInfo.Dead()
                 self.showMonsterInfo()
+                self.showPlayerInfo()
+                self.progressEdit.setText(va.progressText)
+
             else:
                 if sender.text() == "상점":
                     print("상점")
             
                 if sender.text() == "고블린던전":
+                    va.isMonsterDead = False
                     self.messageEdit.setText("고블린던전에 입장하셨습니다.")
+                    self.monsterInfo = ms.Monster("고블린", 1000, 100, 1, 10, 10)
+
+                    va.progressText += "야생의 " + self.monsterInfo.name + "이 나타났다!\n"
+                    self.progressEdit.setText(va.progressText)
 
                     self.sys.changeDungeonVal()
 
-                    self.chgMonsterImg()
+                    self.chgMonsterImg(self.monsterInfo.name)
 
                     self.showMonsterInfo()
             
                 if sender.text() == "슬라임던전":
+                    va.isMonsterDead = False
+                    self.monsterInfo = ms.Monster("슬라임", 1000, 100, 1, 10, 10)
                     self.messageEdit.setText("슬라임던전에 입장하셨습니다.")
 
                     va.progressText += "야생의 " + self.monsterInfo.name + "이 나타났다!\n"
@@ -300,16 +332,21 @@ class TextRPG(QWidget):
 
                     self.sys.changeDungeonVal()
 
-                    self.chgMonsterImg()
+                    self.chgMonsterImg(self.monsterInfo.name)
 
                     self.showMonsterInfo()
             
                 if sender.text() == "늑대던전":
+                    va.isMonsterDead = False
+                    self.monsterInfo = ms.Monster("늑대", 1000, 100, 1, 10, 10)
                     self.messageEdit.setText("늑대던전에 입장하셨습니다.")
-                
+
+                    va.progressText += "야생의 " + self.monsterInfo.name + "이 나타났다!\n"
+                    self.progressEdit.setText(va.progressText)
+
                     self.sys.changeDungeonVal()
 
-                    self.chgMonsterImg()
+                    self.chgMonsterImg(self.monsterInfo.name)
 
                     self.showMonsterInfo()
         else:
@@ -342,6 +379,9 @@ class TextRPG(QWidget):
             self.btn1.setText("고블린던전")
             self.btn2.setText("슬라임던전")
             self.btn3.setText("늑대던전")
+
+    def initDungeon(self):
+        pass
 
 
 if __name__ == '__main__':
