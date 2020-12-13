@@ -2,10 +2,6 @@ import Variables.variable as va
 
 class Systems:
 
-    def Turn(self):
-        turn, va.turn = va.turn, not va.turn
-        return turn
-
     def isDungeon(self):
         return va.inDungeon
 

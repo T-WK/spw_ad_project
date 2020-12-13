@@ -20,17 +20,12 @@ class Monster:
 
     def Dead(self, player):
         va.progressText += self.name + "이(가) 죽었습니다.\n"
-        player.curExp += 10
-        self.__del__()
+        va.progressText += str(self.dropGold) + "골드와 " + str(self.dropExp) + "경험치를 얻었습니다.\n"
+        player.curExp += self.dropExp
+        player.gold += self.dropGold
 
     def attack(self):
         va.progressText += self.name + "이(가) 공격했습니다.\n"
 
-    def __del__(self):
-        print("처치되었습니다.")
-        print(self.dropGold, "골드와", self.dropExp, "경험치를 얻었습니다.")
-
-    def setHp(self, val):
-        self.hp = val
-
-    
+    def setInt(self):
+        pass

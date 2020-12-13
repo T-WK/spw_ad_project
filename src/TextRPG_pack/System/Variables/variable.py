@@ -7,3 +7,5 @@ progressText = ""
 
 isMonsterDead = False
 isPlayerDead = False
+
+dungeon = None

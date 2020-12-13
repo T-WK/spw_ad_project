@@ -2,7 +2,7 @@ import Variables.variable as va
 
 class Character:
 
-    def __init__(self, name, maxHp, atk, defense, luck, level, maxExp, gold):
+    def __init__(self, name, maxHp, maxMana, atk, defense, luck, level, maxExp, gold):
         self.name = name
 
         self.maxHp = maxHp
@@ -18,10 +18,11 @@ class Character:
 
         self.gold = gold
 
-        self.maxMana = 10
+        self.maxMana = maxMana
         self.curMana = self.maxMana
 
         self.mulEmp = 2
+
 
     def isDead(self):
         if self.curHp <= 0:
@@ -54,3 +55,9 @@ class Character:
     def attack(self, monster):
         monster.curHp -= self.atk
         va.progressText += "플레이어가 공격했습니다!\n"
+
+    def setInt(self):
+        self.atk = int(self.atk)
+        self.maxHp = int(self.maxHp)
+        self.defense = int(self.defense)
+        self.maxExp = int(self.maxExp)
