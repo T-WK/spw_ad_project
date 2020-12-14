@@ -9,3 +9,4 @@ isMonsterDead = False
 isPlayerDead = False
 
 dungeon = None
+monsterIndex = 0
