@@ -1,6 +1,7 @@
 import Variables.variable as va
 
 class Systems:
+
     def isDungeon(self):
         return va.inDungeon
 
