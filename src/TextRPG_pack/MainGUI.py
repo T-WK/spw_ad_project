@@ -133,7 +133,7 @@ class TextRPG(QWidget):
     # 왼쪽 상단 GUI
 
     def playerUI(self):
-        playerImg = "../Art/모험가.jpeg"
+        playerImg = "Art/모험가.jpeg"
 
         # player text ui
         self.playerImgUI = QLabel()
@@ -170,16 +170,16 @@ class TextRPG(QWidget):
 
     def chgPlayerImg(self, job):
         if job == "전사":
-            self.playerImg = "../Art/전사.png"
+            self.playerImg = "Art/전사.png"
         elif job == "궁수":
-            self.playerImg = "../Art/궁수.png"
+            self.playerImg = "Art/궁수.png"
         elif job == "마법사":
-            self.playerImg = "../Art/마법사.png"
+            self.playerImg = "Art/마법사.png"
 
         self.playerImgUI.setPixmap(QPixmap(self.playerImg).scaled(250, 250))
 
     def monsterUI(self):
-        self.monsterImg = "../Art/투명.png"
+        self.monsterImg = "Art/투명.png"
 
         # monster text ui
         self.monsterImgUI = QLabel()
@@ -201,18 +201,40 @@ class TextRPG(QWidget):
     def chgMonsterImg(self, name):
         if self.sys.isDungeon():
             if va.isMonsterDead:
-                self.monsterImg = "../Art/폭발.jpeg"
+                self.monsterImg = "Art/폭발.jpeg"
             else:
-                if name == "슬라임":
-                    self.monsterImg = "../Art/슬라임.png"
-                elif name == "주황버섯":
-                    self.monsterImg = "../Art/주황버섯.png"
+                if name == "주황버섯":
+                    self.monsterImg = "Art/주황버섯.png"
                 elif name == "파랑버섯":
-                    self.monsterImg = "../Art/파랑버섯.png"
+                    self.monsterImg = "Art/파랑버섯.png"
+                elif name == "뿔버섯":
+                    self.monsterImg = "Art/뿔버섯.png"
+                elif name == "좀비버섯":
+                    self.monsterImg = "Art/좀비버섯.png"
+                elif name == "변형된 주황버섯":
+                    self.monsterImg = "Art/변형된 주황버섯.png"
+                elif name == "슬라임":
+                    self.monsterImg = "Art/슬라임.png"
+                elif name == "레드슬라임":
+                    self.monsterImg = "Art/레드슬라임.png"
+                elif name == "실버슬라임":
+                    self.monsterImg = "Art/실버슬라임.png"
+                elif name == "큐브슬라임":
+                    self.monsterImg = "Art/큐브슬라임.png"
+                elif name == "변형된 슬라임":
+                    self.monsterImg = "Art/변형된 슬라임.png"
                 elif name == "늑대":
-                    self.monsterImg = "../Art/늑대.png"
+                    self.monsterImg = "Art/늑대.png"
+                elif name == "치와와":
+                    self.monsterImg = "Art/치와와.png"
+                elif name == "케르베로스":
+                    self.monsterImg = "Art/케르베로스.png"
+                elif name == "고양이":
+                    self.monsterImg = "Art/고양이.png"
+                elif name == "시바":
+                    self.monsterImg = "Art/시바.png"
         else:
-            self.monsterImg = "../Art/투명.png"
+            self.monsterImg = "Art/투명.png"
 
         self.monsterImgUI.setPixmap(QPixmap(self.monsterImg).scaled(250, 250))
 
@@ -269,6 +291,7 @@ class TextRPG(QWidget):
             if self.sys.isDungeon():
                 if sender.text() == "던전나가기":
                     self.messageEdit.setText("던전에서 나왔습니다.")
+                    va.monsterIndex = 0
                     self.sys.changeDungeonVal()
                     self.chgMonsterImg(None)
                     va.progressText = ""
@@ -293,11 +316,7 @@ class TextRPG(QWidget):
                     self.showStatusEdit()
                     self.progressEdit.setText(va.progressText)
                 else:
-                    if sender.text() == "다음 스테이지":
-                        self.nextStage()
-                    else:
-                        return
-
+                    return
             else:
                 if sender.text() == "상점":
                     print("상점")
@@ -315,7 +334,7 @@ class TextRPG(QWidget):
                     self.chgMonsterImg(self.monsterInfo.name)
 
                     self.showMonsterInfo()
-            
+
                 if sender.text() == "슬라임던전":
                     va.dungeon = "슬라임던전"
                     va.isMonsterDead = False
@@ -330,7 +349,7 @@ class TextRPG(QWidget):
                     self.chgMonsterImg(self.monsterInfo.name)
 
                     self.showMonsterInfo()
-            
+
                 if sender.text() == "늑대던전":
                     va.dungeon = "늑대던전"
                     va.isMonsterDead = False
@@ -382,23 +401,25 @@ class TextRPG(QWidget):
 
     def nextStage(self):
         if va.isMonsterDead:
+            va.isMonsterDead = False
             va.monsterIndex += 1
+            if va.monsterIndex > 4:
+                va.monsterIndex = 0
+                return
             self.monsterInfo = self.newMonster(va.dungeon, va.monsterIndex)
+            self.generateMonster()
 
-            va.progressText = ""
-            self.progressEdit.clear()
-            va.progressText += "야생의 " + self.monsterInfo.name + "이(가) 나타났다!\n"
-            self.progressEdit.setText(va.progressText)
-            self.chgMonsterImg(self.monsterInfo.name)
-
-            self.showMonsterInfo()
 
     def newMonster(self, dungeon, index):
         if dungeon == "버섯던전":
             keys = list(ml.mushrooms.keys())
             values = list(ml.mushrooms.values())
         elif dungeon == "슬라임던전":
-            pass
+            keys = list(ml.slimes.keys())
+            values = list(ml.slimes.values())
+        elif dungeon == "늑대던전":
+            keys = list(ml.wolves.keys())
+            values = list(ml.wolves.values())
 
         name = keys[index]
         maxHp = values[index][0]
@@ -410,6 +431,16 @@ class TextRPG(QWidget):
         monster = ms.Monster(name, maxHp, atk, lvl, dropExp, dropGold)
 
         return monster
+
+    def generateMonster(self):
+        va.progressText = ""
+        self.progressEdit.clear()
+        va.progressText += "야생의 " + self.monsterInfo.name + "이(가) 나타났다!\n"
+        self.progressEdit.setText(va.progressText)
+        self.chgMonsterImg(self.monsterInfo.name)
+
+        self.showMonsterInfo()
+
 
     def isLevelUp(self):
         if self.chrInfo.curExp >= self.chrInfo.maxExp:
