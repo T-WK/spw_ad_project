@@ -390,7 +390,6 @@ class TextRPG(QWidget):
         pass
 
     def newMonster(self):
-        name = ml.goblins[]
 
         if va.dungeon == "고블린던전":
             self.monsterInfo = ms.Monster()
