@@ -14,7 +14,7 @@ class Qpixmap_App(QWidget):
         self.lb_img = QLabel()
 
 
-        self.lb_img.setPixmap(QPixmap("Art/모험가.jpeg"))
+        self.lb_img.setPixmap(QPixmap("TextRPG_pack/Art/모험가.jpeg"))
         vbox = QVBoxLayout()
         vbox.addWidget(self.lb_img)
         self.setLayout(vbox)
