@@ -122,7 +122,7 @@ class TextRPG(QWidget):
         buttonHbox2.addWidget(Button("다음 스테이지", self.nextStage))
         buttonHbox2.addWidget(Button("던전나가기", self.buttonEvent))
 
-        self.btn1 = Button("고블린던전", self.buttonEvent)
+        self.btn1 = Button("버섯던전", self.buttonEvent)
         buttonHbox3.addWidget(self.btn1)
         self.btn2 = Button("슬라임던전", self.buttonEvent)
         buttonHbox3.addWidget(self.btn2)
@@ -205,8 +205,10 @@ class TextRPG(QWidget):
             else:
                 if name == "슬라임":
                     self.monsterImg = "../Art/슬라임.png"
-                elif name == "고블린":
-                    self.monsterImg = "../Art/고블린.png"
+                elif name == "주황버섯":
+                    self.monsterImg = "../Art/주황버섯.png"
+                elif name == "파랑버섯":
+                    self.monsterImg = "../Art/파랑버섯.png"
                 elif name == "늑대":
                     self.monsterImg = "../Art/늑대.png"
         else:
@@ -265,6 +267,14 @@ class TextRPG(QWidget):
 
         if self.sys.isStart():
             if self.sys.isDungeon():
+                if sender.text() == "던전나가기":
+                    self.messageEdit.setText("던전에서 나왔습니다.")
+                    self.sys.changeDungeonVal()
+                    self.chgMonsterImg(None)
+                    va.progressText = ""
+                    self.progressEdit.clear()
+                    self.monsterPhysicalBar.setValue(0)
+                    return
                 if not va.isMonsterDead:
                     if sender.text() == "공격":
                         self.chrInfo.attack(self.monsterInfo)
@@ -274,44 +284,28 @@ class TextRPG(QWidget):
                         print("스킬1")
                     elif sender.text() == "스킬2":
                         print("스킬2")
-                    elif sender.text() == "다음 스테이지":
-                        return
-                    elif sender.text() == "던전나가기":
-                        self.messageEdit.setText("던전에서 나왔습니다.")
-                        self.sys.changeDungeonVal()
-                        self.chgMonsterImg(None)
-                        va.progressText = ""
-                        self.progressEdit.clear()
-                        self.monsterPhysicalBar.setValue(0)
-                        return
+
+                    self.isDead()
+                    self.isLevelUp()
+
+                    self.showMonsterInfo()
+                    self.showPlayerInfo()
+                    self.showStatusEdit()
+                    self.progressEdit.setText(va.progressText)
                 else:
-                    if sender.text() == "던전나가기":
-                        self.messageEdit.setText("던전에서 나왔습니다.")
-                        self.sys.changeDungeonVal()
-                        self.chgMonsterImg(None)
-                        va.progressText = ""
-                        self.progressEdit.clear()
-                        self.monsterPhysicalBar.setValue(0)
+                    if sender.text() == "다음 스테이지":
+                        self.nextStage()
+                    else:
                         return
-                    return
-
-                self.isDead()
-                self.isLevelUp()
-
-                self.showMonsterInfo()
-                self.showPlayerInfo()
-                self.showStatusEdit()
-                self.progressEdit.setText(va.progressText)
 
             else:
                 if sender.text() == "상점":
                     print("상점")
-            
-                if sender.text() == "고블린던전":
-                    va.dungeon = "고블린던전"
+                if sender.text() == "버섯던전":
+                    va.dungeon = "버섯던전"
                     va.isMonsterDead = False
-                    self.messageEdit.setText("고블린던전에 입장하셨습니다.")
-                    self.monsterInfo = ms.Monster("고블린", 1000, 100, 1, 10, 10)
+                    self.messageEdit.setText("버섯던전에 입장하셨습니다.")
+                    self.monsterInfo = self.newMonster(va.dungeon, va.monsterIndex)
 
                     va.progressText += "야생의 " + self.monsterInfo.name + "이(가) 나타났다!\n"
                     self.progressEdit.setText(va.progressText)
@@ -379,7 +373,7 @@ class TextRPG(QWidget):
                     self.showStatusEdit()
                 self.chgPlayerImg(sender.text())
                 self.sys.changeStartVal()
-                self.btn1.setText("고블린던전")
+                self.btn1.setText("버섯던전")
                 self.btn2.setText("슬라임던전")
                 self.btn3.setText("늑대던전")
             except AttributeError:
@@ -387,16 +381,39 @@ class TextRPG(QWidget):
                 return
 
     def nextStage(self):
-        pass
+        if va.isMonsterDead:
+            va.monsterIndex += 1
+            self.monsterInfo = self.newMonster(va.dungeon, va.monsterIndex)
 
-    def newMonster(self):
+            va.progressText = ""
+            self.progressEdit.clear()
+            va.progressText += "야생의 " + self.monsterInfo.name + "이(가) 나타났다!\n"
+            self.progressEdit.setText(va.progressText)
+            self.chgMonsterImg(self.monsterInfo.name)
 
-        if va.dungeon == "고블린던전":
-            self.monsterInfo = ms.Monster()
+            self.showMonsterInfo()
+
+    def newMonster(self, dungeon, index):
+        if dungeon == "버섯던전":
+            keys = list(ml.mushrooms.keys())
+            values = list(ml.mushrooms.values())
+        elif dungeon == "슬라임던전":
+            pass
+
+        name = keys[index]
+        maxHp = values[index][0]
+        atk = values[index][1]
+        lvl = values[index][2]
+        dropExp = values[index][3]
+        dropGold = values[index][4]
+
+        monster = ms.Monster(name, maxHp, atk, lvl, dropExp, dropGold)
+
+        return monster
 
     def isLevelUp(self):
         if self.chrInfo.curExp >= self.chrInfo.maxExp:
-            self.chrInfo.curExp = 0
+            self.chrInfo.curExp = self.chrInfo.curExp - self.chrInfo.maxExp
             self.chrInfo.maxExp *= 1.5
             self.chrInfo.level += 1
 
@@ -412,6 +429,7 @@ class TextRPG(QWidget):
             self.monsterInfo.Dead(self.chrInfo)
             self.chgMonsterImg(None)
             self.showStatusEdit()
+
 
 if __name__ == '__main__':
     import sys
