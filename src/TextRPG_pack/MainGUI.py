@@ -268,12 +268,24 @@ class TextRPG(QWidget):
                 if not va.isMonsterDead:
                     if sender.text() == "공격":
                         self.chrInfo.attack(self.monsterInfo)
+                        self.playerDamages()
+
                     elif sender.text() == "방어":
-                        print("방어")
+                        self.chrInfo.Defense(self.monsterInfo)
+                        self.playerDamages()
+
                     elif sender.text() == "스킬1":
-                        print("스킬1")
+                        self.chrInfo.skill_1(self.monsterInfo)
+                        self.playerDamages()
+
                     elif sender.text() == "스킬2":
-                        print("스킬2")
+                        self.chrInfo.skill_2(self.monsterInfo)
+                        self.playerDamages()
+
+                    elif sender.text() == "스킬3":
+                        self.chrInfo.skill_3(self.monsterInfo)
+                        self.playerDamages()
+
                     elif sender.text() == "다음 스테이지":
                         return
                     elif sender.text() == "던전나가기":
@@ -298,6 +310,23 @@ class TextRPG(QWidget):
                 self.isDead()
                 self.isLevelUp()
 
+                self.isChrDead()
+
+                if va.isPlayerDead:
+                    self.messageEdit.setText("마을로 돌아왔습니다.")
+                    self.sys.changeDungeonVal()
+                    self.chgMonsterImg(None)
+                    self.progressEdit.clear()
+                    self.monsterPhysicalBar.setValue(0)
+                    self.chrInfo.curHp = self.chrInfo.maxHp
+                    self.chrInfo.curMana = self.chrInfo.maxMana
+
+                    self.showPlayerInfo()
+                    self.showStatusEdit()
+                    self.progressEdit.setText(va.progressText)
+
+                    return
+
                 self.showMonsterInfo()
                 self.showPlayerInfo()
                 self.showStatusEdit()
@@ -306,7 +335,7 @@ class TextRPG(QWidget):
             else:
                 if sender.text() == "상점":
                     print("상점")
-            
+
                 if sender.text() == "고블린던전":
                     va.dungeon = "고블린던전"
                     va.isMonsterDead = False
@@ -321,7 +350,7 @@ class TextRPG(QWidget):
                     self.chgMonsterImg(self.monsterInfo.name)
 
                     self.showMonsterInfo()
-            
+
                 if sender.text() == "슬라임던전":
                     va.dungeon = "슬라임던전"
                     va.isMonsterDead = False
@@ -336,7 +365,7 @@ class TextRPG(QWidget):
                     self.chgMonsterImg(self.monsterInfo.name)
 
                     self.showMonsterInfo()
-            
+
                 if sender.text() == "늑대던전":
                     va.dungeon = "늑대던전"
                     va.isMonsterDead = False
@@ -412,6 +441,22 @@ class TextRPG(QWidget):
             self.monsterInfo.Dead(self.chrInfo)
             self.chgMonsterImg(None)
             self.showStatusEdit()
+
+    def isChrDead(self):
+        if self.chrInfo.curHp <= 0:
+            self.chrInfo.curHp = self.chrInfo.maxHp
+            va.isPlayerDead = True
+            self.chrInfo.isDead()
+            self.showStatusEdit()
+
+    def playerDamages(self):
+        if not va.isMonsterDead:
+            print("!!1")
+            print("!", self.chrInfo.curHp)
+            self.monsterInfo.attack(self.chrInfo)
+            print("@", self.chrInfo.curHp)
+            self.showPlayerInfo()
+
 
 if __name__ == '__main__':
     import sys

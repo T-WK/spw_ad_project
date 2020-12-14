@@ -1,5 +1,6 @@
 import Variables.variable as va
 
+
 class Monster:
     name = ""
     hp = 1000
@@ -24,7 +25,8 @@ class Monster:
         player.curExp += self.dropExp
         player.gold += self.dropGold
 
-    def attack(self):
+    def attack(self, player):
+        player.curHp -= self.atk
         va.progressText += self.name + "이(가) 공격했습니다.\n"
 
     def setInt(self):
