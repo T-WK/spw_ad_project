@@ -1,43 +1,63 @@
+import Variables.variable as va
+
 class Character:
 
-    def __init__(self, name, hp, atk, defense, luck, level, exp, maxExp, gold):
+    def __init__(self, name, maxHp, maxMana, atk, defense, luck, level, maxExp, gold):
         self.name = name
-        self.hp = hp
+
+        self.maxHp = maxHp
+        self.curHp = self.maxHp
+
         self.atk = atk
         self.defense = defense
         self.luck = luck
         self.level = level
-        self.exp = exp
+
         self.maxExp = maxExp
+        self.curExp = 0
+
         self.gold = gold
-        self.mana
+
+        self.maxMana = maxMana
+        self.curMana = self.maxMana
+
         self.mulEmp = 2
 
+
     def isDead(self):
-        if self.hp <= 0:
-            self.__del__(self.dropExp, self.dropGold)
+        if self.curHp <= 0:
+            self.__del__()
 
-    def __del__(self, dropExp, dropGold):
+    def __del__(self):
         print("죽었습니다.")
-        print(dropGold, "골드와", dropExp, "경험치를 잃었습니다.")
+        print(self.gold, "골드와", self.curExp, "경험치를 잃었습니다.")
 
-    def setHp(val):
-        self.hp = val
+    def setHp(self, val):
+        self.curHp = val
     
-    def setMana(val):
+    def setMana(self, val):
         self.mana = val
     
-    def setExp(val):
+    def setExp(self, val):
         self.exp = val
 
         if self.exp >= self.maxExp:
-            setLevel(self.maxExp//self.exp, self.maxExp%self.exp)
+            self.setLevel(self.maxExp//self.exp, self.maxExp%self.exp)
 
-    def setLevel(level, exp):
+    def setLevel(self, level, exp):
         self.level += level
         self.exp = exp
         self.maxExp *= self.mulEmp**level
     
-    def setGold(val):
+    def setGold(self, val):
         self.gold += val
     
+    def attack(self, monster):
+        monster.curHp -= self.atk
+        va.progressText += "플레이어가 공격했습니다!\n"
+
+    def setInt(self):
+        self.atk = int(self.atk)
+        self.maxHp = int(self.maxHp)
+        self.defense = int(self.defense)
+        self.maxExp = int(self.maxExp)

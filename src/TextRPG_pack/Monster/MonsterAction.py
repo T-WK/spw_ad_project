@@ -1,3 +1,5 @@
+import Variables.variable as va
+
 class Monster:
     name = ""
     hp = 1000
@@ -7,23 +9,23 @@ class Monster:
     dropExp = 0
     dropGold = 0
 
-    def __init__(self, name, hp, atk, lvl, dropExp, dropGold):
+    def __init__(self, name, maxHp, atk, lvl, dropExp, dropGold):
         self.name = name
-        self.hp = hp
+        self.maxHp = maxHp
+        self.curHp = self.maxHp
         self.atk = atk
         self.lvl = lvl
         self.dropExp = dropExp
         self.dropGold = dropGold
 
-    def isDead(self):
-        if self.hp <= 0:
-            self.__del__(self.dropExp, self.dropGold)
+    def Dead(self, player):
+        va.progressText += self.name + "이(가) 죽었습니다.\n"
+        va.progressText += str(self.dropGold) + "골드와 " + str(self.dropExp) + "경험치를 얻었습니다.\n"
+        player.curExp += self.dropExp
+        player.gold += self.dropGold
 
-    def __del__(self, dropExp, dropGold):
-        print("처치되었습니다.")
-        print(dropGold, "골드와", dropExp, "경험치를 얻었습니다.")
+    def attack(self):
+        va.progressText += self.name + "이(가) 공격했습니다.\n"
 
-    def setHp(val):
-        self.hp = val
-
-    
+    def setInt(self):
+        pass
