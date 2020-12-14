@@ -1,6 +1,5 @@
 import Variables.variable as va
 
-
 class Character:
 
     def __init__(self, name, maxHp, maxMana, atk, defense, luck, level, maxExp, gold):
@@ -24,55 +23,38 @@ class Character:
 
         self.mulEmp = 2
 
+
     def isDead(self):
         if self.curHp <= 0:
-            va.progressText += "죽었습니다.\n"
-            va.progressText += str(self.gold*0.5) + "골드와" + str(self.curExp) + "경험치를 잃었습니다."
-            self.curExp = 0
-            self.gold = self.gold*0.5
+            self.__del__()
+
+    def __del__(self):
+        print("죽었습니다.")
+        print(self.gold, "골드와", self.curExp, "경험치를 잃었습니다.")
 
     def setHp(self, val):
         self.curHp = val
-
-    def getHp(self):
-        return self.curHp
-
+    
     def setMana(self, val):
-        self.curMana = val
-
+        self.mana = val
+    
     def setExp(self, val):
-        self.curExp = val
+        self.exp = val
 
-        if self.curExp >= self.maxExp:
-            self.setLevel(self.maxExp // self.curExp, self.maxExp % self.curExp)
+        if self.exp >= self.maxExp:
+            self.setLevel(self.maxExp//self.exp, self.maxExp%self.exp)
 
     def setLevel(self, level, exp):
         self.level += level
-        self.curExp = exp
-        self.maxExp *= self.mulEmp ** level
-
+        self.exp = exp
+        self.maxExp *= self.mulEmp**level
+    
     def setGold(self, val):
         self.gold += val
-
+    
     def attack(self, monster):
         monster.curHp -= self.atk
         va.progressText += "플레이어가 공격했습니다!\n"
-
-    def Defense(self, monster):
-        self.curHp -= monster.atk * (1 - self.defense / 100)
-        va.progressText += "플레이어가 방어했습니다!\n"
-
-    def skill_1(self, monster):
-        monster.curHp -= self.atk  # 스킬 값 넣어줘야함
-        va.progressText += "플레이어가 스킬1을 사용 했습니다!\n"
-
-    def skill_2(self, monster):
-        monster.curHp -= self.atk  # 스킬 값 넣어줘야함
-        va.progressText += "플레이어가 스킬2를 사용 했습니다!\n"
-
-    def skill_3(self, monster):
-        monster.curHp -= self.atk  # 스킬 값 넣어줘야함
-        va.progressText += "플레이어가 스킬3를 사용 했습니다!\n"
 
     def setInt(self):
         self.atk = int(self.atk)
