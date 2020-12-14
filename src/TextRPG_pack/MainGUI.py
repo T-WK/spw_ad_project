@@ -301,6 +301,7 @@ class TextRPG(QWidget):
                 if not va.isMonsterDead:
                     if sender.text() == "공격":
                         self.chrInfo.attack(self.monsterInfo)
+                        print(self.monsterInfo.maxHp, self.monsterInfo.curHp)
                     elif sender.text() == "방어":
                         print("방어")
                     elif sender.text() == "스킬1":
@@ -308,6 +309,7 @@ class TextRPG(QWidget):
                     elif sender.text() == "스킬2":
                         print("스킬2")
 
+                    self.monsterInfo.attack(self.chrInfo)
                     self.isDead()
                     self.isLevelUp()
 
@@ -368,27 +370,15 @@ class TextRPG(QWidget):
             try:
                 if sender.text() == "전사":
                     self.messageEdit.setText("당신의 직업은 전사입니다.")
-                    self.chrInfo.maxHp = 1500
-                    self.chrInfo.maxMana = 20
-                    self.chrInfo.atk = 100
-                    self.chrInfo.defense = 50
-                    self.chrInfo.luck = 10
+                    self.chrInfo = ch.Character("전사", 1500, 20, 100, 50, 10, 1, 100, 50)
                     self.showStatusEdit()
                 elif sender.text() == "궁수":
                     self.messageEdit.setText("당신의 직업은 궁수입니다.")
-                    self.chrInfo.maxHp = 1000
-                    self.chrInfo.maxMana = 30
-                    self.chrInfo.atk = 150
-                    self.chrInfo.defense = 20
-                    self.chrInfo.luck = 50
+                    self.chrInfo = ch.Character("궁수", 1000, 30, 150, 20, 50, 1, 100, 50)
                     self.showStatusEdit()
                 elif sender.text() == "마법사":
                     self.messageEdit.setText("당신의 직업은 마법사입니다.")
-                    self.chrInfo.maxHp = 1000
-                    self.chrInfo.maxMana = 40
-                    self.chrInfo.atk = 150
-                    self.chrInfo.defense = 20
-                    self.chrInfo.luck = 20
+                    self.chrInfo = ch.Character("전사", 1000, 40, 150, 20, 20, 1, 100, 50)
                     self.showStatusEdit()
                 self.chgPlayerImg(sender.text())
                 self.sys.changeStartVal()
