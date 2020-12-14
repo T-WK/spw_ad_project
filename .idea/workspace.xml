@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
+<<<<<<< Updated upstream
     <list default="true" id="98893dfe-d255-41f6-879f-2b151ea1bdd8" name="Default Changelist" comment="" />
+=======
+    <list default="true" id="be49f4c4-d386-4a9a-b59f-7a21bfa13c2d" name="Default Changelist" comment="" />
+>>>>>>> Stashed changes
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -10,7 +14,11 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+<<<<<<< Updated upstream
   <component name="ProjectId" id="1lfAKtYi8ogPYz51HKB3ln0KDze" />
+=======
+  <component name="ProjectId" id="1lemT7dYeu6D78eAFRY2I9FeS4z" />
+>>>>>>> Stashed changes
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
@@ -19,6 +27,10 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+<<<<<<< Updated upstream
+=======
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+>>>>>>> Stashed changes
   </component>
   <component name="RunManager">
     <configuration name="MainGUI" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -51,11 +63,19 @@
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
+<<<<<<< Updated upstream
       <changelist id="98893dfe-d255-41f6-879f-2b151ea1bdd8" name="Default Changelist" comment="" />
       <created>1607977710130</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1607977710130</updated>
+=======
+      <changelist id="be49f4c4-d386-4a9a-b59f-7a21bfa13c2d" name="Default Changelist" comment="" />
+      <created>1607965936922</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1607965936922</updated>
+>>>>>>> Stashed changes
     </task>
     <servers />
   </component>
