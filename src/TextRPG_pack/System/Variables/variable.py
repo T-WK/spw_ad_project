@@ -10,3 +10,5 @@ isPlayerDead = False
 
 dungeon = None
 monsterIndex = 0
+
+job = ""

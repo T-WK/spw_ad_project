@@ -25,7 +25,7 @@ class Monster:
         player.gold += self.dropGold
 
     def attack(self, player):
-        va.progressText += self.name + "이(가) 공격했습니다.\n"
+        va.progressText += self.name + "이(가) 플레이어에게 " + str(self.atk) + "만큼의 데미지를 입혔습니다.\n"
         player.curHp -= self.atk
 
     def setInt(self):

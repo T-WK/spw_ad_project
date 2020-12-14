@@ -175,6 +175,8 @@ class TextRPG(QWidget):
             self.playerImg = "Art/궁수.png"
         elif job == "마법사":
             self.playerImg = "Art/마법사.png"
+        else:
+            self.playerImg = "Art/폭발.jpeg"
 
         self.playerImgUI.setPixmap(QPixmap(self.playerImg).scaled(250, 250))
 
@@ -294,22 +296,30 @@ class TextRPG(QWidget):
                     va.monsterIndex = 0
                     self.sys.changeDungeonVal()
                     self.chgMonsterImg(None)
+                    self.chgPlayerImg(va.job)
+                    self.chrInfo.curHp = self.chrInfo.maxHp
+                    if va.isPlayerDead:
+                        va.isPlayerDead = False
                     va.progressText = ""
                     self.progressEdit.clear()
                     self.monsterPhysicalBar.setValue(0)
+                    self.showPlayerInfo()
                     return
-                if not va.isMonsterDead:
+                if not va.isMonsterDead and not va.isPlayerDead:
                     if sender.text() == "공격":
                         self.chrInfo.attack(self.monsterInfo)
-                        print(self.monsterInfo.maxHp, self.monsterInfo.curHp)
+                        self.monsterInfo.attack(self.chrInfo)
                     elif sender.text() == "방어":
-                        print("방어")
+                        self.chrInfo.curHp -= self.monsterInfo.atk * (1 - self.chrInfo.defense / 100)
+                        va.progressText += "플레이어가 방어했습니다.\n"
+                        va.progressText += self.monsterInfo.name + "이(가) 플레이어에게 " + str(self.monsterInfo.atk * (1 - self.chrInfo.defense / 100)) + "만큼의 데미지를 입혔습니다.\n"
                     elif sender.text() == "스킬1":
-                        print("스킬1")
+                        self.chrInfo.skill_1(self.monsterInfo)
                     elif sender.text() == "스킬2":
-                        print("스킬2")
+                        self.chrInfo.skill_2(self.monsterInfo)
+                    elif sender.text() == "스킬3":
+                        self.chrInfo.skill_3(self.monsterInfo)
 
-                    self.monsterInfo.attack(self.chrInfo)
                     self.isDead()
                     self.isLevelUp()
 
@@ -368,18 +378,8 @@ class TextRPG(QWidget):
                     self.showMonsterInfo()
         else:
             try:
-                if sender.text() == "전사":
-                    self.messageEdit.setText("당신의 직업은 전사입니다.")
-                    self.chrInfo = ch.Character("전사", 1500, 20, 100, 50, 10, 1, 100, 50)
-                    self.showStatusEdit()
-                elif sender.text() == "궁수":
-                    self.messageEdit.setText("당신의 직업은 궁수입니다.")
-                    self.chrInfo = ch.Character("궁수", 1000, 30, 150, 20, 50, 1, 100, 50)
-                    self.showStatusEdit()
-                elif sender.text() == "마법사":
-                    self.messageEdit.setText("당신의 직업은 마법사입니다.")
-                    self.chrInfo = ch.Character("전사", 1000, 40, 150, 20, 20, 1, 100, 50)
-                    self.showStatusEdit()
+                self.chrInfo = self.newPlayer(sender.text())
+                self.showStatusEdit()
                 self.chgPlayerImg(sender.text())
                 self.sys.changeStartVal()
                 self.btn1.setText("버섯던전")
@@ -431,6 +431,21 @@ class TextRPG(QWidget):
 
         self.showMonsterInfo()
 
+    def newPlayer(self, job):
+        if job == "전사":
+            va.job = "전사"
+            self.messageEdit.setText("당신의 직업은 전사입니다.")
+            chrInfo = ch.Character("전사", 1500, 20, 100, 50, 10, 1, 100, 50)
+        elif job == "궁수":
+            va.job = "궁수"
+            self.messageEdit.setText("당신의 직업은 궁수입니다.")
+            chrInfo = ch.Character("궁수", 1000, 30, 150, 20, 50, 1, 100, 50)
+        elif job == "마법사":
+            va.job = "마법사"
+            self.messageEdit.setText("당신의 직업은 마법사입니다.")
+            chrInfo = ch.Character("전사", 1000, 40, 150, 20, 20, 1, 100, 50)
+
+        return chrInfo
 
     def isLevelUp(self):
         if self.chrInfo.curExp >= self.chrInfo.maxExp:
@@ -449,6 +464,12 @@ class TextRPG(QWidget):
             va.isMonsterDead = True
             self.monsterInfo.Dead(self.chrInfo)
             self.chgMonsterImg(None)
+            self.showStatusEdit()
+        if self.chrInfo.curHp <= 0:
+            self.chrInfo.curHp = 0
+            va.isPlayerDead = True
+            self.chrInfo.Dead()
+            self.chgPlayerImg(None)
             self.showStatusEdit()
 
 
